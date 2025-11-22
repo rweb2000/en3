@@ -4,16 +4,52 @@
 <meta charset="UTF-8">
 <title>英语听力 播放器</title>
 <style>
-body { font-family: sans-serif; padding: 20px; }
-#list li { cursor: pointer; margin: 5px 0; }
-#list li.playing { color: red; font-weight: bold; }
-.progress { margin: 10px 0; display: flex; align-items: center; }
-.progress span { width: 50px; text-align: center; }
+body {
+    font-family: sans-serif;
+    padding: 20px;
+}
+
+#list li {
+    cursor: pointer;
+    margin: 5px 0;
+}
+#list li.playing {
+    color: red;
+    font-weight: bold;
+}
+
+/* 进度条区域拉满宽度 */
+.progress {
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/* 时间文字 */
+.progress span {
+    width: 60px;
+    text-align: center;
+    font-size: 20px;
+}
+
+/* 进度条加粗、拉满宽度 */
+#seek {
+    flex: 1;
+    height: 20px;                /* 加粗 */
+}
+
+/* 播放按钮放大，宽度占屏幕的 1/5 */
+#playBtn {
+    width: 20%;
+    font-size: 24px;
+    padding: 15px 0;
+}
 </style>
 </head>
 <body>
 
-<h1>MP3 播放器</h1>
+<h1>英语听力 播放器</h1>
 <h3>当前播放：<span id="songName">无</span></h3>
 
 <div class="progress">
