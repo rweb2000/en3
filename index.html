@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>英语听力 播放器</title>
+<style>
+body { font-family: sans-serif; padding: 20px; }
+#list li { cursor: pointer; margin: 5px 0; }
+#list li.playing { color: red; font-weight: bold; }
+.progress { margin: 10px 0; display: flex; align-items: center; }
+.progress span { width: 50px; text-align: center; }
+</style>
+</head>
+<body>
+
+<h1>MP3 播放器</h1>
+<h3>当前播放：<span id="songName">无</span></h3>
+
+<div class="progress">
+    <span id="curTime">00:00</span>
+    <input type="range" id="seek" min="0" max="100" value="0">
+    <span id="durTime">00:00</span>
+</div>
+
+<button id="playBtn">▶️ 播放 / 暂停</button>
+
+<h2>曲目列表</h2>
+<ol id="list"></ol>
+
+<audio id="audio" preload="metadata"></audio>
+
+<script>
+// 在这里手动写文件名（必须与 index.html 同目录）
+const files = [
+"01Welcometoschool.mp3",
+"02U1P1.mp3",
+"03U1P2.mp3",
+"04U1P3.mp3",
+"05U2P1.mp3",
+"06U2P2.mp3",
+"07U2P3.mp3",
+"08U3P1.mp3",
+"09U3P2.mp3",
+"10U3P3.mp3",
+"11U4P1.mp3",
+"12U4P2.mp3",
+"13U4P3.mp3",
+"14U5P1.mp3",
+"15U5P2.mp3",
+"16U5P3.mp3",
+"17U6P1.mp3",
+"18U6P2.mp3",
+"19U6P3.mp3",
+"20Unit1.mp3",
+"21Unit2.mp3",
+"22Unit3.mp3",
+"23Unit4.mp3",
+"24Unit5.mp3",
+"25Unit6.mp3",
+"26.mp3"
+];
+
+const audio = document.getElementById("audio");
+const listEl = document.getElementById("list");
+const songNameEl = document.getElementById("songName");
+const playBtn = document.getElementById("playBtn");
+const curTimeEl = document.getElementById("curTime");
+const durTimeEl = document.getElementById("durTime");
+const seek = document.getElementById("seek");
+
+let currentIndex = -1;
+
+// 格式化 mm:ss
+function fmt(t){
+    if(isNaN(t)) return "00:00";
+    t = Math.floor(t);
+    return String(Math.floor(t/60)).padStart(2,'0') + ":" + String(t%60).padStart(2,'0');
+}
+
+// 渲染列表
+function renderList(){
+    listEl.innerHTML = "";
+    files.forEach((name, idx)=>{
+        const li = document.createElement("li");
+        li.textContent = name;
+        li.onclick = ()=> playIndex(idx);
+        listEl.appendChild(li);
+    });
+}
+renderList();
+
+// 播放某一首
+function playIndex(i){
+    currentIndex = i;
+    audio.src = files[i];
+    audio.play();
+    songNameEl.textContent = files[i];
+    highlight();
+}
+
+// 高亮当前播放
+function highlight(){
+    [...listEl.children].forEach((li,i)=>{
+        li.classList.toggle("playing", i===currentIndex);
+    });
+}
+
+// 播放 / 暂停
+playBtn.onclick = ()=>{
+    if(!audio.src) return;
+    if(audio.paused) audio.play();
+    else audio.pause();
+};
+
+// 更新时间与进度条
+audio.ontimeupdate = ()=>{
+    curTimeEl.textContent = fmt(audio.currentTime);
+    durTimeEl.textContent = fmt(audio.duration);
+    seek.value = audio.duration ? (audio.currentTime / audio.duration)*100 : 0;
+};
+
+// 拖动进度条
+seek.oninput = ()=>{
+    if(audio.duration)
+        audio.currentTime = audio.duration * (seek.value/100);
+};
+
+// 自动播放下一首
+audio.onended = ()=>{
+    if(currentIndex+1 < files.length)
+        playIndex(currentIndex+1);
+};
+</script>
+
+</body>
+</html>
