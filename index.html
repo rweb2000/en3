@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>英语听力播放器</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary-color: #4361ee;
@@ -173,15 +172,22 @@
             transform: scale(1.05);
         }
 
-        /* 播放图标微调 */
-        .fa-play {
-            position: relative;
-            left: 3px;
+        /* 图标样式 */
+        .icon {
+            width: 1em;
+            height: 1em;
+            fill: currentColor;
+            display: inline-block;
         }
 
-        /* 暂停图标不需要偏移 */
-        .fa-pause {
-            position: static;
+        .icon-play {
+            width: 1.2em;
+            height: 1.2em;
+        }
+
+        .icon-pause {
+            width: 1.2em;
+            height: 1.2em;
         }
 
         .playlist-container {
@@ -218,12 +224,14 @@
             background: #f8f9fa;
         }
 
-        .search-box i {
+        .search-icon {
             position: absolute;
             left: 15px;
             top: 50%;
             transform: translateY(-50%);
             color: var(--gray-color);
+            width: 16px;
+            height: 16px;
         }
 
         .playlist {
@@ -325,7 +333,9 @@
         <div class="player-card">
             <div class="current-track">
                 <div class="track-icon">
-                    <i class="fas fa-headphones"></i>
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                    </svg>
                 </div>
                 <div class="track-info">
                     <div class="track-name" id="songName">选择文件开始播放</div>
@@ -345,13 +355,19 @@
 
             <div class="controls">
                 <button class="control-btn" id="prevBtn">
-                    <i class="fas fa-step-backward"></i>
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+                    </svg>
                 </button>
                 <button class="control-btn play-btn" id="playBtn">
-                    <i class="fas fa-play" id="playIcon"></i>
+                    <svg class="icon icon-play" id="playIcon" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
                 </button>
                 <button class="control-btn" id="nextBtn">
-                    <i class="fas fa-step-forward"></i>
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
+                    </svg>
                 </button>
             </div>
         </div>
@@ -363,7 +379,9 @@
             </div>
             
             <div class="search-box">
-                <i class="fas fa-search"></i>
+                <svg class="icon search-icon" viewBox="0 0 24 24">
+                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
                 <input type="text" id="searchInput" placeholder="搜索文件...">
             </div>
             
@@ -458,7 +476,8 @@
             audio.play();
             songNameEl.textContent = files[i];
             playStatus.textContent = "播放中";
-            playIcon.className = "fas fa-pause";
+            playIcon.setAttribute('viewBox', '0 0 24 24');
+            playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
             playBtn.classList.add("pulse");
             highlight();
         }
@@ -477,12 +496,14 @@
             if(audio.paused) {
                 audio.play();
                 playStatus.textContent = "播放中";
-                playIcon.className = "fas fa-pause";
+                playIcon.setAttribute('viewBox', '0 0 24 24');
+                playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
                 playBtn.classList.add("pulse");
             } else {
                 audio.pause();
                 playStatus.textContent = "暂停中";
-                playIcon.className = "fas fa-play";
+                playIcon.setAttribute('viewBox', '0 0 24 24');
+                playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
                 playBtn.classList.remove("pulse");
             }
         };
@@ -558,7 +579,8 @@
         // 自动播放下一首
         audio.onended = ()=>{
             playStatus.textContent = "播放结束";
-            playIcon.className = "fas fa-play";
+            playIcon.setAttribute('viewBox', '0 0 24 24');
+            playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
             playBtn.classList.remove("pulse");
             
             if(currentIndex+1 < files.length)
